@@ -50,17 +50,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
   getCardsOnLoad();
 
+  //change Polish characters
+  function changePolishLetters(string) {
+    string = string.replace(/[ąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/g, c => "acelnoszzACELNOSZZ"["ąćęłńóśźżĄĆĘŁŃÓŚŹŻ".indexOf(c)]);
+    return string;
+  }
+
   //searching channels by name
   const filterInput = document.querySelector('.filter__input');
 
   const findChannels = (searchWord, channelsArr) => {
+    searchWord = changePolishLetters(searchWord);
     return channelsArr.filter(channel => {
         const regex = new RegExp(searchWord, 'gi');
-        return channel.title.match(regex);
+        const newTitle = changePolishLetters(channel.title);
+        return newTitle.match(regex);
     }) 
   };
 
-  function matchChannels() {
+  function matchChannels(e) {
     let inputValue = '';
     if (this.value) {
       inputValue = this.value;
@@ -69,6 +77,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     showChannels(matchedChannels);
   }
+
+  //bloking of RegExp special characters
+  filterInput.addEventListener('keydown', (e) => {
+    const badChar = [220, 191, 54, 52, 190, 56, 187, 219, 221, 57, 48];
+    if (badChar.includes(e.keyCode)) {
+      setTimeout(function() {
+        e.target.value += '';
+      }, 4);
+      e.preventDefault();
+    }
+  });
 
   filterInput.addEventListener('keyup', matchChannels);
 });
