@@ -22,9 +22,9 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
-body {
+/* body {
   margin: 0;
-}
+} */
 
 h1 {
   font-size: 2em;
@@ -241,6 +241,7 @@ button:-moz-focusring {
 }
 
 .wrapper__header {
+  padding: 8px;
   order: 0;
 }
 
@@ -349,6 +350,7 @@ button:-moz-focusring {
   }
 
   .wrapper__header {
+    padding: 0;
     order: 0;
     -ms-grid-column: 1;
     -ms-grid-column-span: 2;
