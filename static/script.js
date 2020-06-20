@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   //alphabetical sorting
   const sortingAlph = (channelsArr) => {
-    return channelsArr.sort((a, b) => (a.title > b.title) ? 1 : -1);
+    return channelsArr.sort((a, b) => (a.title.toLowerCase() > b.title.toLowerCase()) ? 1 : -1);
   };
 
   //sorting by numbers
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function() {
     return string;
   }
 
-  //searching channels by name
+  //matching channels by title
   const filterInput = document.querySelector('.filter__input');
 
   const findChannels = (searchWord, channelsArr) => {
@@ -136,4 +136,26 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   filterInput.addEventListener('keyup', matchChannels);
+
+  //Clear button handling
+  const handleClear = () => {
+    //hiding ascending/descending button
+    const ascendingDescendingButton = document.querySelector('.button--sort');
+    ascendingDescendingButton.style.display = 'none';
+
+    //clearing radio checked
+    const radioInputs = document.querySelectorAll('[class*="choice--radio"]');
+    [...radioInputs].forEach(input => {
+      input.checked = false;
+    });
+
+    //clearing filter input value
+    filterInput.value = '';
+    getCardsOnLoad();
+  };
+
+  const clearButton = document.querySelector('.button--clear');
+
+  clearButton.addEventListener('click', handleClear);
+
 });
