@@ -36,6 +36,11 @@ document.addEventListener('DOMContentLoaded', function() {
     return channelsArr.sort((a, b) => parseInt(deleteChar(a.statistics[condition])) - parseInt(deleteChar(b.statistics[condition])));
   }
 
+  //reversing array
+  const reverseArr = (channelsArr) => {
+    return channelsArr.reverse();
+  }
+
   //creating cards
   const showChannels = (channelsArr) => {
     const cardsBox = document.querySelector('.js-content');
@@ -112,6 +117,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     //sorting channels array by conditions
     const condition = getSortCondition();
+    const reverse = document.querySelector('.button--sort').dataset.on;
 
     if (condition === 'none') {
       console.log('without sorting');
@@ -119,6 +125,10 @@ document.addEventListener('DOMContentLoaded', function() {
       matchedChannels = sortingAlph(matchedChannels);
     } else {
       matchedChannels = sortingNumb(matchedChannels, condition);
+    }
+
+    if (reverse === 'yes') {
+      matchedChannels = reverseArr(matchedChannels);
     }
 
     showChannels(matchedChannels);
@@ -141,7 +151,9 @@ document.addEventListener('DOMContentLoaded', function() {
   const handleClear = () => {
     //hiding ascending/descending button
     const ascendingDescendingButton = document.querySelector('.button--sort');
-    ascendingDescendingButton.style.display = 'none';
+    ascendingDescendingButton.classList.add('invisible');
+    ascendingDescendingButton.dataset.on = 'no';
+    ascendingDescendingButton.innerText = 'Descending';
 
     //clearing radio checked
     const radioInputs = document.querySelectorAll('[class*="choice--radio"]');
@@ -157,5 +169,35 @@ document.addEventListener('DOMContentLoaded', function() {
   const clearButton = document.querySelector('.button--clear');
 
   clearButton.addEventListener('click', handleClear);
+
+  //ascending/descending button handling
+  //button is visible olny when one of radio inputs is checked
+  const showButton = () => {
+    const ascendingDescendingButton = document.querySelector('.button--sort');
+    ascendingDescendingButton.classList.remove('invisible');
+    matchChannels();
+  };
+
+  const radioInputs = document.querySelectorAll('[class*="choice--radio"]');
+  [...radioInputs].forEach(input => {
+    input.addEventListener('change', showButton);
+  });
+
+  //changing ascending/descending button value and dataset onclick
+  const changeButtonData = (e) => {
+    if (e.target.dataset.on === 'yes') {
+      e.target.dataset.on = 'no';
+      e.target.innerText = 'Descending';
+      matchChannels();
+      return
+    }
+    e.target.dataset.on = 'yes';
+    e.target.innerText = 'Ascending';
+    matchChannels();
+  }
+
+  const ascendingDescendingButton = document.querySelector('.button--sort');
+
+  ascendingDescendingButton.addEventListener('click', changeButtonData);
 
 });

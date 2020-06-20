@@ -91,6 +91,10 @@ button:-moz-focusring {
   text-transform: uppercase;
 }
 
+.invisible {
+  display: none;
+}
+
 .button:active {
   background: #ff9c66;
 }
