@@ -21,24 +21,24 @@
                 <h3 class="sort__header">Sort channels by:</h3>
                 <ul class="sort__options">
                     <li>
-                        <input class="choice choice--radio" name="sort" type="radio" id="sort-title">
+                        <input class="choice choice--radio" data-sort="title" name="sort" type="radio" id="sort-title">
                         <label class="choice__label" for="sort-title">title</label>
                     </li>
                     <li>
-                        <input class="choice choice--radio" name="sort" type="radio" id="sort-subscribers">
+                        <input class="choice choice--radio" data-sort="subscriberCount" name="sort" type="radio" id="sort-subscribers">
                         <label class="choice__label" for="sort-subscribers">subscribers</label>
                     </li>
                     <li>
-                        <input class="choice choice--radio" name="sort" type="radio" id="sort-videos">
+                        <input class="choice choice--radio" data-sort="videoCount" name="sort" type="radio" id="sort-videos">
                         <label class="choice__label" for="sort-videos">videos</label>
                     </li>
                     <li>
-                        <input class="choice choice--radio" name="sort" type="radio" id="sort-views">
+                        <input class="choice choice--radio" data-sort="viewCount" name="sort" type="radio" id="sort-views">
                         <label class="choice__label" for="sort-views">views</label>
                     </li>
                 </ul>
                 <button class="button button--clear">Clear</button>
-                <button class="button button--sort">Sort</button>
+                <button class="button button--sort">Descending</button>
             </div>
         </aside>
         <script src="script.js"></script>

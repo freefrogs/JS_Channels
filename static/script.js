@@ -9,21 +9,34 @@ document.addEventListener('DOMContentLoaded', function() {
   const deleteChar = (string) => {
     return string.replace(/[,. ]/g, '');
   };
+
   //adding imperial notation (dedicated to subscribers, videos & views)
   const numberWithCommas = (string) => {
     return string.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
-  
 
- /*  let test = '13 779 683';
-  let aaa ='6,747 555'
-  test = deleteChar(test);
-  console.log(test);
-  test = numberWithCommas(test);
-  console.log(test);
+  //getting sort condition
+  const getSortCondition = () => {
+    const radioInputs = document.querySelectorAll('[class*="choice--radio"]');
+    const conditionInputs = [...radioInputs].filter(el => el.checked);
+    let condition = 'none'
+    if (conditionInputs.length) {
+      condition = conditionInputs[0].dataset.sort;
+    }
+    return condition;
+  }
 
-  console.log(numberWithCommas(deleteChar(aaa))); */
+  //alphabetical sorting
+  const sortingAlph = (channelsArr) => {
+    return channelsArr.sort((a, b) => (a.title > b.title) ? 1 : -1);
+  };
 
+  //sorting by numbers
+  const sortingNumb = (channelsArr, condition) => {
+    return channelsArr.sort((a, b) => parseInt(deleteChar(a.statistics[condition])) - parseInt(deleteChar(b.statistics[condition])));
+  }
+
+  //creating cards
   const showChannels = (channelsArr) => {
     const cardsBox = document.querySelector('.js-content');
     let cardsContent = '';
@@ -95,7 +108,18 @@ document.addEventListener('DOMContentLoaded', function() {
     if (this.value) {
       inputValue = this.value;
     }
-    const matchedChannels = findChannels(inputValue, channels);
+    let matchedChannels = findChannels(inputValue, channels);
+
+    //sorting channels array by conditions
+    const condition = getSortCondition();
+
+    if (condition === 'none') {
+      console.log('without sorting');
+    } else if (condition === 'title') {
+      matchedChannels = sortingAlph(matchedChannels);
+    } else {
+      matchedChannels = sortingNumb(matchedChannels, condition);
+    }
 
     showChannels(matchedChannels);
   }
