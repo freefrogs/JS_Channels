@@ -5,6 +5,25 @@ document.addEventListener('DOMContentLoaded', function() {
     .then(res => res.json())
     .then(data => channels.push(...data));
 
+  //deleting fallowing characters ' ', ',', '.'
+  const deleteChar = (string) => {
+    return string.replace(/[,. ]/g, '');
+  };
+  //adding imperial notation (dedicated to subscribers, videos & views)
+  const numberWithCommas = (string) => {
+    return string.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+  
+
+ /*  let test = '13 779 683';
+  let aaa ='6,747 555'
+  test = deleteChar(test);
+  console.log(test);
+  test = numberWithCommas(test);
+  console.log(test);
+
+  console.log(numberWithCommas(deleteChar(aaa))); */
+
   const showChannels = (channelsArr) => {
     const cardsBox = document.querySelector('.js-content');
     let cardsContent = '';
@@ -15,6 +34,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     channelsArr.forEach(el => {
+      const subscriberCount = numberWithCommas(deleteChar(el.statistics.subscriberCount));
+      const videoCount = numberWithCommas(deleteChar(el.statistics.videoCount));
+      const viewCount = numberWithCommas(deleteChar(el.statistics.viewCount));
       cardsContent += `
         <div class="card">
           <a class="card__link" href=${el.customUrl} target="_blank">
@@ -24,15 +46,15 @@ document.addEventListener('DOMContentLoaded', function() {
           <div class="card__desc">
             <div class="desc__data">
               <h4 class="desc__name">subscribers:</h4>
-              <p class="desc__value">${el.statistics.subscriberCount}</p>
+              <p class="desc__value">${subscriberCount}</p>
             </div>
             <div class="desc__data">
               <h4 class="desc__name">videos:</h4>
-              <p class="desc__value">${el.statistics.videoCount}</p>
+              <p class="desc__value">${videoCount}</p>
             </div>
             <div class="desc__data">
               <h4 class="desc__name">views:</h4>
-              <p class="desc__value">${el.statistics.viewCount}</p>
+              <p class="desc__value">${viewCount}</p>
             </div>
           </div>
         </div>
@@ -50,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   getCardsOnLoad();
 
-  //change Polish characters
+  //changeing Polish characters
   function changePolishLetters(string) {
     string = string.replace(/[ąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/g, c => "acelnoszzACELNOSZZ"["ąćęłńóśźżĄĆĘŁŃÓŚŹŻ".indexOf(c)]);
     return string;
