@@ -17,3 +17,4 @@
 * zad3d -> nie znam utm, gdy zaczełam o tym czytać okazał się to duży temat (pozostawiłam go do doczytania); rozwiązanie nie zostało przetestowane w Google Analytics; 
 * zad3e -> założyłam, że liczba subscribers, videos i views zawsze bedzie całkowita;
 * dodatkowe1 -> użyłam zmiennych css, zgodnie z Can I Use dla all users są wdrożone w 94,4%;
+* dodatkowe2 -> użyłam localStorage oraz notacji dat według schematu: 29 September 2020, założyłam że każde odświeżenie strony to ponowne wejście na stronę;

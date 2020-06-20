@@ -235,4 +235,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
   const contrastButton = document.querySelector('.contrast');
   contrastButton.addEventListener('click', changeColors);
+
+  //handling entry count
+  //get data
+  const getEntryTime = () => {
+    const thisData = new Date();
+    const day = thisData.getDay();
+    const month = thisData.getMonth();
+    const year = thisData.getFullYear();
+    const monthsArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    return `${day} ${monthsArr[month]} ${year}`;
+  }
+  //handling local Storage
+  const entryCount = () => {
+    //get data from Local Storage
+    const entryData = JSON.parse(localStorage.getItem('entryData')) || [0, '', ''];
+    const entryValue = entryData[0] + 1;
+    const prevEntryData = entryData[2];
+    const thisEntryData = getEntryTime();
+    entryData[0] = entryValue;
+    entryData[1] = prevEntryData;
+    entryData[2] = thisEntryData;
+    //save data in Local Storage
+    localStorage.setItem('entryData', JSON.stringify(entryData));
+  }
+
+  entryCount();
 });
