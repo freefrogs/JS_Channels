@@ -3,7 +3,8 @@ document.addEventListener('DOMContentLoaded', function() {
   const channels = [];
   fetch('channels.json')
     .then(res => res.json())
-    .then(data => channels.push(...data));
+    .then(data => channels.push(...data))
+    .catch(err => console.error(err));
 
   //deleting fallowing characters ' ', ',', '.'
   const deleteChar = (string) => {
@@ -40,6 +41,17 @@ document.addEventListener('DOMContentLoaded', function() {
   const reverseArr = (channelsArr) => {
     return channelsArr.reverse();
   }
+
+  //adding utm with timestamp
+  const changeUrl = (e) => {
+    console.log(e.currentTarget);
+    const utmBasic = 'utm_source=name1&utm_medium=name2&utm_campaign=name3&';
+    const timeStamp = (new Date().toLocaleString( 'sv', { timeZoneName: 'short' })).replace(/[ ]/g,'_').replace(/[:]/g,'');
+    const utmTimeStamp = `utm_content=${timeStamp}`;
+    const url =`${e.currentTarget.dataset.url}?${utmBasic}${utmTimeStamp}`;
+    e.currentTarget.href = url;
+    return false;
+  };
 
   //creating cards
   const showChannels = (channelsArr) => {
@@ -91,7 +103,8 @@ document.addEventListener('DOMContentLoaded', function() {
   const getCardsOnLoad = () => {
     fetch('channels.json')
       .then(res => res.json())
-      .then(data => showChannels(data));
+      .then(data => showChannels(data))
+      .catch(err => console.error(err));
   };
 
   getCardsOnLoad();
@@ -206,14 +219,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
   ascendingDescendingButton.addEventListener('click', changeButtonData);
 
-  //adding utm with timestamp
-  const changeUrl = (e) => {
-    console.log(e.currentTarget);
-    const utmBasic = 'utm_source=name1&utm_medium=name2&utm_campaign=name3&';
-    const timeStamp = (new Date().toLocaleString( 'sv', { timeZoneName: 'short' })).replace(/[ ]/g,'_').replace(/[:]/g,'');
-    const utmTimeStamp = `utm_content=${timeStamp}`;
-    const url =`${e.currentTarget.dataset.url}?${utmBasic}${utmTimeStamp}`;
-    e.currentTarget.href = url;
-    return false;
-  };
+  //handling contrast button
+  const changeColors = () => {
+    const wrapper = document.querySelector('.wrapper');
+    const wrapperClasses = wrapper.classList.value;
+    console.log(wrapperClasses);
+    if (wrapperClasses.includes('wrapper--light')) {
+      wrapper.classList.remove('wrapper--light');
+      wrapper.classList.add('wrapper--dark');
+      return
+    }
+    wrapper.classList.add('wrapper--light');
+    wrapper.classList.remove('wrapper--dark');
+  }
+
+  const contrastButton = document.querySelector('.contrast');
+  contrastButton.addEventListener('click', changeColors);
 });
