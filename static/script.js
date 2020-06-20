@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const viewCount = numberWithCommas(deleteChar(el.statistics.viewCount));
       cardsContent += `
         <div class="card">
-          <a class="card__link" href=${el.customUrl} target="_blank">
+          <a class="card__link" href="#" data-url=${el.customUrl} target="_blank">
             <img class="card__img" src=${el.thumbnails.medium.url} alt="${el.tilte} logo">
           </a>
           <h2 class="card__title">${el.title}</h2>
@@ -78,6 +78,12 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
       `
       cardsBox.innerHTML = cardsContent;
+    });
+    //adding event listener do dynamic HTML elements
+    const channelsLinks = document.querySelectorAll('.card__link');
+
+    [...channelsLinks].forEach(link => {
+      link.addEventListener('click', changeUrl);
     });
   };
 
@@ -200,4 +206,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
   ascendingDescendingButton.addEventListener('click', changeButtonData);
 
+  //adding utm with timestamp
+  const changeUrl = (e) => {
+    console.log(e.currentTarget);
+    const utmBasic = 'utm_source=name1&utm_medium=name2&utm_campaign=name3&';
+    const timeStamp = (new Date().toLocaleString( 'sv', { timeZoneName: 'short' })).replace(/[ ]/g,'_').replace(/[:]/g,'');
+    const utmTimeStamp = `utm_content=${timeStamp}`;
+    const url =`${e.currentTarget.dataset.url}?${utmBasic}${utmTimeStamp}`;
+    e.currentTarget.href = url;
+    return false;
+  };
 });

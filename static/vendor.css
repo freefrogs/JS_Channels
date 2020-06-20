@@ -308,6 +308,7 @@ button:-moz-focusring {
 .card__img {
   width: 100%;
   height: auto;
+  vertical-align: top;
 }
 
 .card__title {
