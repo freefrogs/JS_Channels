@@ -5,7 +5,8 @@
 
 ### Credits
 * [regex](https://regex101.com/),
-* [Can I use](https://www.caniuse.com/)
+* [Can I use](https://www.caniuse.com/),
+* [Koa.js Crash Course - Traversy Media](https://www.youtube.com/watch?v=z84uTk5zmak),
 * stackoverflow & google,
 
 ### Opisy do rozwiązania
@@ -18,3 +19,4 @@
 * zad3e -> założyłam, że liczba subscribers, videos i views zawsze bedzie całkowita;
 * dodatkowe1 -> użyłam zmiennych css, zgodnie z Can I Use dla all users są wdrożone w 94,4%;
 * dodatkowe2 -> użyłam localStorage oraz notacji dat według schematu: 29 September 2020, założyłam że każde odświeżenie strony to ponowne wejście na stronę;
+* router -> moje pierwsze zetknięcie z Koa, podeszłam do tematu łopatologicznie;

@@ -1,7 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
   //fetching data from json file
+  const url = 'http://localhost:3000/data'
+
   const channels = [];
-  fetch('channels.json')
+  fetch(url)
     .then(res => res.json())
     .then(data => channels.push(...data))
     .catch(err => console.error(err));
@@ -100,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   //adding all Cards onload
   const getCardsOnLoad = () => {
-    fetch('channels.json')
+    fetch(url)
       .then(res => res.json())
       .then(data => showChannels(data))
       .catch(err => console.error(err));
