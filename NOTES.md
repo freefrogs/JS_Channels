@@ -8,6 +8,9 @@
 * [CSS](https://jigsaw.w3.org/css-validator/),
 * [JS](https://validatejavascript.com/).
 
+### Code converters
+* [Autoprefixer](http://autoprefixer.github.io/).
+
 ### References
 * [regex](https://regex101.com/),
 * [Can I use](https://www.caniuse.com/),
@@ -25,3 +28,6 @@
 * dodatkowe1 -> użyłam zmiennych css, zgodnie z Can I Use dla all users są wdrożone w 94,4%;
 * dodatkowe2 -> użyłam localStorage oraz notacji dat według schematu: 29 September 2020, założyłam, że każde odświeżenie strony to ponowne wejście na stronę;
 * router -> moje pierwsze zetknięcie z Koa, podeszłam do tematu łopatologicznie;
+
+### Podsumowanie
+Żałuję, że nie dodałam Webpacka na poczatku. Nie zastosowałam modułów JS bo mają tylko 88.77% dla all users (dane z Can I use). Rozwiązanie testowane w przeglądarce Chrome. RWD testowane w -> patrz RWD tests na górze strony. W Chrome DevTools dostałam bardzo dziwny wygląd dla małych rozmiarów (w pierwszej kolejności wczytywały się style dla rozmiaru 544px, nie wiem dlaczego). Zadanie mi się podobało, bardzo ciekawe.
