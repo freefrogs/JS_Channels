@@ -8,7 +8,7 @@
 * [CSS](https://jigsaw.w3.org/css-validator/),
 * [JS](https://validatejavascript.com/).
 
-### Credits
+### References
 * [regex](https://regex101.com/),
 * [Can I use](https://www.caniuse.com/),
 * [Koa.js Crash Course - Traversy Media](https://www.youtube.com/watch?v=z84uTk5zmak),
