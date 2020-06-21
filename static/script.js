@@ -44,7 +44,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   //adding utm with timestamp
   const changeUrl = (e) => {
-    console.log(e.currentTarget);
     const utmBasic = 'utm_source=name1&utm_medium=name2&utm_campaign=name3&';
     const timeStamp = (new Date().toLocaleString( 'sv', { timeZoneName: 'short' })).replace(/[ ]/g,'_').replace(/[:]/g,'');
     const utmTimeStamp = `utm_content=${timeStamp}`;
@@ -139,7 +138,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const reverse = document.querySelector('.button--sort').dataset.on;
 
     if (condition === 'none') {
-      console.log('without sorting');
     } else if (condition === 'title') {
       matchedChannels = sortingAlph(matchedChannels);
     } else {
@@ -223,7 +221,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const changeColors = () => {
     const wrapper = document.querySelector('.wrapper');
     const wrapperClasses = wrapper.classList.value;
-    console.log(wrapperClasses);
     if (wrapperClasses.includes('wrapper--light')) {
       wrapper.classList.remove('wrapper--light');
       wrapper.classList.add('wrapper--dark');
