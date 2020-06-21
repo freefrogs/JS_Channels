@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <title>JavaScript Youtube Channels</title>
         <link rel="stylesheet" type="text/css" href="vendor.css">
     </head>
     <body class="wrapper wrapper--light">
+        <div class="error invisible">
+            <h2 class="error__text">Sorry, something went wrong...</h2>
+        </div>
         <header class="wrapper__header">
             <h1 class="header"><span class="header__js-logo">JS</span> Channels</h1>
             <button class="contrast">K</button>
@@ -39,7 +42,7 @@
                     </li>
                 </ul>
                 <button class="button button--clear">Clear</button>
-                <button class="button button--sort invisible" data-on='no'>Descending</button>
+                <button class="button button--sort invisible" data-on='no'>do descending</button>
             </div>
         </aside>
         <script src="script.js"></script>

@@ -14,7 +14,7 @@ async function runServer() {
     const app = new Koa();
     app.use(koaStatic(path.join(__dirname, '..', 'static')));
 
-    //Json Prettier Middleware
+    //Json Middleware
     app.use(json());
     //adding router GET method with channels data
     const router = new KoaRouter();

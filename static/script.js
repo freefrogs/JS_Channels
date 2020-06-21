@@ -1,70 +1,65 @@
-document.addEventListener('DOMContentLoaded', function() {
-  //fetching data from json file
-  const url = 'http://localhost:3000/data'
-
+document.addEventListener('DOMContentLoaded', () => {
+  const url = 'http://localhost:3000/data';
   const channels = [];
-  fetch(url)
-    .then(res => res.json())
-    .then(data => channels.push(...data))
-    .catch(err => console.error(err));
 
-  //deleting fallowing characters ' ', ',', '.'
-  const deleteChar = (string) => {
-    return string.replace(/[,. ]/g, '');
-  };
+  // Deleting following characters ' ', ',', '.'
+  const deleteChar = (string) => string.replace(/[,. ]/g, '');
 
-  //adding imperial notation (dedicated to subscribers, videos & views)
-  const numberWithCommas = (string) => {
-    return string.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  };
+  // Adding imperial notation (dedicated to subscribers, videos & views)
+  const numberWithCommas = (string) => string.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
-  //getting sort condition
+  // Getting sort condition
   const getSortCondition = () => {
     const radioInputs = document.querySelectorAll('[class*="choice--radio"]');
-    const conditionInputs = [...radioInputs].filter(el => el.checked);
-    let condition = 'none'
+    const conditionInputs = [...radioInputs].filter((el) => el.checked);
+    let condition = 'none';
     if (conditionInputs.length) {
       condition = conditionInputs[0].dataset.sort;
     }
     return condition;
-  }
+  };
 
-  //alphabetical sorting
+  // Alphabetical sorting
   const sortingAlph = (channelsArr) => {
     return channelsArr.sort((a, b) => (a.title.toLowerCase() > b.title.toLowerCase()) ? 1 : -1);
   };
 
-  //sorting by numbers
+  // Sorting by numbers
   const sortingNumb = (channelsArr, condition) => {
-    return channelsArr.sort((a, b) => parseInt(deleteChar(a.statistics[condition])) - parseInt(deleteChar(b.statistics[condition])));
-  }
+    return channelsArr.sort((a, b) => parseInt(deleteChar(a.statistics[condition]), 10) - parseInt(deleteChar(b.statistics[condition]), 10));
+  };
 
-  //reversing array
+  // Reversing array
   const reverseArr = (channelsArr) => {
     return channelsArr.reverse();
-  }
+  };
 
-  //adding utm with timestamp
+  // Changing Polish characters
+  const changePolishLetters = (string) => {
+    return string.replace(/[ąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/g, (c) => 'acelnoszzACELNOSZZ'['ąćęłńóśźżĄĆĘŁŃÓŚŹŻ'.indexOf(c)]);
+  };
+
+  // Adding utm with timestamp
   const changeUrl = (e) => {
     const utmBasic = 'utm_source=name1&utm_medium=name2&utm_campaign=name3&';
-    const timeStamp = (new Date().toLocaleString( 'sv', { timeZoneName: 'short' })).replace(/[ ]/g,'_').replace(/[:]/g,'');
+    const timeStamp = (new Date().toLocaleString('sv', { timeZoneName: 'short' })).replace(/[ ]/g, '_').replace(/[:]/g, '_');
     const utmTimeStamp = `utm_content=${timeStamp}`;
-    const url =`${e.currentTarget.dataset.url}?${utmBasic}${utmTimeStamp}`;
-    e.currentTarget.href = url;
+    const linkUrl = `${e.currentTarget.dataset.url}?${utmBasic}${utmTimeStamp}`;
+    e.currentTarget.href = linkUrl;
     return false;
   };
 
-  //creating cards
+  // Creating cards
   const showChannels = (channelsArr) => {
     const cardsBox = document.querySelector('.js-content');
     let cardsContent = '';
 
     if (!channelsArr.length) {
       cardsBox.innerHTML = '';
-      return
+      return;
     }
 
-    channelsArr.forEach(el => {
+    channelsArr.forEach((el) => {
       const subscriberCount = numberWithCommas(deleteChar(el.statistics.subscriberCount));
       const videoCount = numberWithCommas(deleteChar(el.statistics.videoCount));
       const viewCount = numberWithCommas(deleteChar(el.statistics.viewCount));
@@ -89,60 +84,66 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
           </div>
         </div>
-      `
+      `;
       cardsBox.innerHTML = cardsContent;
     });
-    //adding event listener do dynamic HTML elements
+    // Adding event listener to dynamic HTML elements
     const channelsLinks = document.querySelectorAll('.card__link');
 
-    [...channelsLinks].forEach(link => {
+    [...channelsLinks].forEach((link) => {
       link.addEventListener('click', changeUrl);
     });
   };
 
-  //adding all Cards onload
-  const getCardsOnLoad = () => {
-    fetch(url)
-      .then(res => res.json())
-      .then(data => showChannels(data))
-      .catch(err => console.error(err));
+  // Error handler
+  const errorHandler = () => {
+    const main = document.querySelector('.error');
+    main.classList.remove('invisible');
   };
 
-  getCardsOnLoad();
+  // Fetching data from json file
+  const fetchData = async () => {
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      if (!channels.length) {
+        channels.push(...data);
+      }
+      showChannels(data);
+    } catch (err) {
+      errorHandler();
+    }
+  };
 
-  //changeing Polish characters
-  function changePolishLetters(string) {
-    string = string.replace(/[ąćęłńóśźżĄĆĘŁŃÓŚŹŻ]/g, c => "acelnoszzACELNOSZZ"["ąćęłńóśźżĄĆĘŁŃÓŚŹŻ".indexOf(c)]);
-    return string;
-  }
+  // adding all Cards on document load
+  fetchData();
 
-  //matching channels by title
+  // Matching channels by title
   const filterInput = document.querySelector('.filter__input');
 
   const findChannels = (searchWord, channelsArr) => {
-    searchWord = changePolishLetters(searchWord);
-    return channelsArr.filter(channel => {
-        const regex = new RegExp(searchWord, 'gi');
-        const newTitle = changePolishLetters(channel.title);
-        return newTitle.match(regex);
-    }) 
+    const word = changePolishLetters(searchWord);
+    return channelsArr.filter((channel) => {
+      const regex = new RegExp(word, 'gi');
+      const newTitle = changePolishLetters(channel.title);
+      return newTitle.match(regex);
+    });
   };
 
-  function matchChannels(e) {
+  function matchChannels() {
     let inputValue = '';
     if (this.value) {
       inputValue = this.value;
     }
     let matchedChannels = findChannels(inputValue, channels);
 
-    //sorting channels array by conditions
+    // Sorting channels array by conditions
     const condition = getSortCondition();
     const reverse = document.querySelector('.button--sort').dataset.on;
 
-    if (condition === 'none') {
-    } else if (condition === 'title') {
+    if (condition === 'title') {
       matchedChannels = sortingAlph(matchedChannels);
-    } else {
+    } else if (condition === 'subscriberCount' || condition === 'videoCount' || condition === 'viewCount') {
       matchedChannels = sortingNumb(matchedChannels, condition);
     }
 
@@ -153,11 +154,11 @@ document.addEventListener('DOMContentLoaded', function() {
     showChannels(matchedChannels);
   }
 
-  //bloking of RegExp special characters
+  // Bloking of RegExp special characters
   filterInput.addEventListener('keydown', (e) => {
     const badChar = [220, 191, 54, 52, 190, 56, 187, 219, 221, 57, 48];
     if (badChar.includes(e.keyCode)) {
-      setTimeout(function() {
+      setTimeout(() => {
         e.target.value += '';
       }, 4);
       e.preventDefault();
@@ -166,88 +167,96 @@ document.addEventListener('DOMContentLoaded', function() {
 
   filterInput.addEventListener('keyup', matchChannels);
 
-  //Clear button handling
+  // Clear button handling
   const handleClear = () => {
-    //hiding ascending/descending button
+    // Hiding ascending/descending button
     const ascendingDescendingButton = document.querySelector('.button--sort');
     ascendingDescendingButton.classList.add('invisible');
     ascendingDescendingButton.dataset.on = 'no';
-    ascendingDescendingButton.innerText = 'Descending';
+    ascendingDescendingButton.innerText = 'do descending';
 
-    //clearing radio checked
+    // Clearing checked radio
     const radioInputs = document.querySelectorAll('[class*="choice--radio"]');
-    [...radioInputs].forEach(input => {
-      input.checked = false;
+    [...radioInputs].forEach((inputEl) => {
+      inputEl.checked = false;
     });
 
-    //clearing filter input value
+    // Clearing filter input value
     filterInput.value = '';
-    getCardsOnLoad();
+    fetchData();
   };
 
   const clearButton = document.querySelector('.button--clear');
 
   clearButton.addEventListener('click', handleClear);
 
-  //ascending/descending button handling
-  //button is visible olny when one of radio inputs is checked
+  // Ascending/descending button handling
+  // Button is visible only when one of radio inputs is checked
   const showButton = () => {
     const ascendingDescendingButton = document.querySelector('.button--sort');
     ascendingDescendingButton.classList.remove('invisible');
     matchChannels();
+    // Clearing filter input value
+    filterInput.value = '';
   };
 
   const radioInputs = document.querySelectorAll('[class*="choice--radio"]');
-  [...radioInputs].forEach(input => {
-    input.addEventListener('change', showButton);
+  [...radioInputs].forEach((inputEl) => {
+    inputEl.addEventListener('change', showButton);
   });
 
-  //changing ascending/descending button value and dataset onclick
+  // Changing ascending/descending button value and dataset onclick
   const changeButtonData = (e) => {
     if (e.target.dataset.on === 'yes') {
       e.target.dataset.on = 'no';
-      e.target.innerText = 'Descending';
+      e.target.innerText = 'do descending';
       matchChannels();
-      return
+      // Clearing filter input value
+      filterInput.value = '';
+      return;
     }
     e.target.dataset.on = 'yes';
-    e.target.innerText = 'Ascending';
+    e.target.innerText = 'do ascending';
     matchChannels();
-  }
+    // Clearing filter input value
+    filterInput.value = '';
+  };
 
   const ascendingDescendingButton = document.querySelector('.button--sort');
 
   ascendingDescendingButton.addEventListener('click', changeButtonData);
 
-  //handling contrast button
+  // Handling contrast button
   const changeColors = () => {
     const wrapper = document.querySelector('.wrapper');
     const wrapperClasses = wrapper.classList.value;
     if (wrapperClasses.includes('wrapper--light')) {
       wrapper.classList.remove('wrapper--light');
       wrapper.classList.add('wrapper--dark');
-      return
+      return;
     }
     wrapper.classList.add('wrapper--light');
     wrapper.classList.remove('wrapper--dark');
-  }
+  };
 
   const contrastButton = document.querySelector('.contrast');
+
   contrastButton.addEventListener('click', changeColors);
 
-  //handling entry count
-  //get data
+  // Handling entry count
+  // Get date
   const getEntryTime = () => {
     const thisData = new Date();
-    const day = thisData.getDay();
+    const day = thisData.getDate();
     const month = thisData.getMonth();
     const year = thisData.getFullYear();
     const monthsArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     return `${day} ${monthsArr[month]} ${year}`;
-  }
-  //handling local Storage
+  };
+
+  // Handling localStorage
   const entryCount = () => {
-    //get data from Local Storage
+    // Get data from localStorage
     const entryData = JSON.parse(localStorage.getItem('entryData')) || [0, '', ''];
     const entryValue = entryData[0] + 1;
     const prevEntryData = entryData[2];
@@ -255,9 +264,9 @@ document.addEventListener('DOMContentLoaded', function() {
     entryData[0] = entryValue;
     entryData[1] = prevEntryData;
     entryData[2] = thisEntryData;
-    //save data in Local Storage
+    // Save data in localStorage
     localStorage.setItem('entryData', JSON.stringify(entryData));
-  }
+  };
 
   entryCount();
 });
